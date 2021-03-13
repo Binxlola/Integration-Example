@@ -1,3 +1,5 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-undef */
 import { dayOfTheWeek, monthOfTheYear } from './app';
 
 test('getDay returns the long-format day of the week', () => {
