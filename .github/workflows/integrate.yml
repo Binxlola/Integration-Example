@@ -3,6 +3,11 @@ name: Node Continuous Integration
 on:
   pull_request:
     branches: [ master ]
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
 
 
 jobs:
@@ -19,4 +24,19 @@ jobs:
       - run: npm ci
       - run: eslint . --ext .js
       - run: npm test
-      - run: npm run build
+  
+  automerge:
+    if: github.event.review.state == 'approved' || !github.event.review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: reitermarkus/automerge@v1
+        with:
+          token: ${{ secrets.AUTOMERGE }}
+          merge-method: rebase
+          do-not-merge-labels: never-merge
+          required-labels: automerge
+          pull-request: ${{ github.event.inputs.pull-request }}
+          dry-run: true
+
+
+      
